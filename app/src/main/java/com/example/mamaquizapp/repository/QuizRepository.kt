@@ -15,4 +15,6 @@ interface QuizRepository {
     fun getQuestions(): LiveData<List<Questions>>
 
     fun getQuestionAndAllAnswers(): LiveData<List<QuestionAndAllAnswers>>
+
+    suspend fun updateQuestionState(isAnswerd: Boolean, answerStatee: Boolean, id: Int)
 }

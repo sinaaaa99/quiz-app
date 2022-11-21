@@ -35,7 +35,6 @@ class QuizViewModel(repository: QuizRepository) : ViewModel() {
                 currentState.postValue(QuizState.FinishState(currentQuestionNum, score))
             }
 
-
         }
 
         currentState.addSource(questionAndAllAnswers) { questionAndAllAnswers ->

@@ -40,4 +40,8 @@ class Repository : QuizRepository {
     override fun getQuestionAndAllAnswers(): LiveData<List<QuestionAndAllAnswers>> {
         return allQuestionAndAllAnswers
     }
+
+    override suspend fun updateQuestionState(isAnswerd: Boolean, answerStatee: Boolean, id: Int) {
+        quizDao.updateQuestionState(isAnswerd,answerStatee,id)
+    }
 }

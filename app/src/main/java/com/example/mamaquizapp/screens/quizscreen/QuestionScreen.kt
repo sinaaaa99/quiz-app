@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,13 +34,39 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.mamaquizapp.R
-import com.example.mamaquizapp.data.model.QuizState
+import com.example.mamaquizapp.data.model.DestinationRoute
 import com.example.mamaquizapp.ui.theme.*
-import com.example.mamaquizapp.viewmodel.QuizViewModel
+import com.example.mamaquizapp.viewmodel.QuizViewModelnew
 
 @Composable
-fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) {
+fun QuestionScreen(quizViewModel: QuizViewModelnew, navHostController: NavHostController) {
+
+//    quizViewModel.currentQuestionNum.postValue(0)
+
+    val quizData = quizViewModel.questionAndAnswers.observeAsState().value
+
+
+    val context = LocalContext.current
+    val activity = context.findActivity()
+
+    val intent = activity?.intent
+
+    val getQuestionType = intent?.getIntExtra("questionType", 0)
+
+
+    /*val quizData1: Any? = if (quizData?.question?.questionType==getQuestionType) {
+
+        quizData
+
+    } else {
+
+        navHostController.navigate(DestinationRoute.FinishScreen.route)
+
+    }*/
+
+//    quizViewModel.determineCurrentQuestion(getQuestionType!!)
 
 
     var answerIndex by remember(quizData) {
@@ -62,16 +89,26 @@ fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) 
         mutableStateOf(1)
     }
 
+    val lastQuestion by remember(quizData) {
+        mutableStateOf(quizData?.question?.isLast)
+    }
 
-    val context = LocalContext.current
-    val activity = context.findActivity()
 
-    val intent = activity?.intent
+    //answer state
+    val isAnswered by remember(quizData) {
+        mutableStateOf(quizData?.question?.isAnswered)
+    }
+    var answerState by remember(quizData) {
+        mutableStateOf(false)
+    }
+    val questionId by remember(quizData) {
+        mutableStateOf(quizData?.question?.id)
+    }
 
-    val getQuestionType = intent?.getIntExtra("questionType", 0)
+//    Log.d("lastQuiz", lastQuestion.toString())
 
-    val questionData =
-        if (quizData.data.question.questionType == getQuestionType) quizData else TODO()
+
+    //    if (quizData!!.question.questionType == getQuestionType)
 
 
 //    Log.d("questionType",getQuestionType.toString())
@@ -82,7 +119,7 @@ fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DeepBlue)
+            .background(darkcolor)
             .padding(8.dp)
             .verticalScroll(scrollable)
     ) {
@@ -97,7 +134,30 @@ fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) 
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "", tint = Color.White)
 
             Text(
-                text = "سناریوی مرحله اول",
+                text = when (getQuestionType) {
+                    1 -> {
+                        "سناریوی مرحله اول"
+                    }
+                    2 -> {
+                        "سناریوی مرحله دوم"
+                    }
+                    3 -> {
+                        "سناریوی مرحله سوم"
+                    }
+                    4 -> {
+                        "سناریوی مرحله چهارم"
+                    }
+                    5 -> {
+                        "سناریوی مرحله پنجم"
+                    }
+                    6 -> {
+                        "سناریوی مرحله ششم"
+                    }
+                    7 -> {
+                        "سناریوی مرحله هفتم"
+                    }
+                    else -> ""
+                },
                 style = MaterialTheme.typography.h5,
                 textAlign = TextAlign.Center,
                 color = Color.White,
@@ -135,10 +195,34 @@ fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) 
 
 
                 Text(
-                    text = "خانمی 30 ساله، نولی پار، با بارداری کم خطر، اتقباضات نامنظم رحمی و دیلاتاسیون سرویکس 3 سانتی¬متر، ساکن در یکی از شهرستان¬های آذربایجان شرقی، به بیمارستان آموزشی درمانی (بیمارستان سطح سه مجهز به بخش LDR) مراجعه نموده است. با توجه به توضیحات ارائه شده، کدام یک از گزینه¬های مراقبتی در موقع پذیرش برای ایشان توصیه و ارائه گردد؟",
-                    modifier = Modifier.fillMaxWidth(),
+                    text = when (getQuestionType) {
+
+                        1 -> {
+                            "خانمی 30 ساله، نولی پار، با بارداری کم خطر، اتقباضات نامنظم رحمی و دیلاتاسیون سرویکس 3 سانتی¬متر، ساکن در یکی از شهرستان¬های آذربایجان شرقی، به بیمارستان آموزشی درمانی (بیمارستان سطح سه مجهز به بخش LDR) مراجعه نموده است. با توجه به توضیحات ارائه شده، کدام یک از گزینه¬های مراقبتی در موقع پذیرش برای ایشان توصیه و ارائه گردد؟"
+                        }
+                        2 -> {
+                            "خانمی 25 ساله، نولی پار، با بارداری کم خطر، دیلاتاسیون سرویکس 4 سانتی¬متر، به بیمارستان آموزشی درمانی (بیمارستان سطح سه مجهز به بخش LDR) مراجعه نموده است. با توجه به توضیحات ارائه شده، کدام یک از گزینه¬های مراقبتی را در موقع پذیرش برای ایشان توصیه و ارائه گردد؟"
+                        }
+                        3 -> {
+                            "خانمی 22 ساله، با بارداری کم خطر و سابقه یک بار زایمان طبیعی، اتقباضات منظم رحمی و دیلاتاسیون سرویکس 6 سانتی متر، به بیمارستان آموزشی درمانی (بیمارستان سطح سه مجهز به بخش LDR) مراجعه نموده است. با توجه به توضیحات ارائه شده، کدام یک از گزینه¬های مراقبتی را در بخش لیبر برای ایشان توصیه و ارائه گردد؟"
+                        }
+                        4 -> {
+                            "خانمی 28 ساله، با بارداری کم خطر، با سابقه یک بار زایمان طبیعی، دیلاتاسیون سرویکس 10 سانتی متر، جایگاه سر جنین صفر، با وزن تقریبی جنین 3800 گرم در سونوگرافی، در بیمارستان سطح سه مجهز به بخش LDR بستری شده است. با توجه به توضیحات ارائه شده، کدام یک از گزینه¬های مراقبتی را در بخش لیبر برای ایشان توصیه و ارائه گردد؟"
+                        }
+                        5 -> {
+                            "خانمی 19 ساله، بدون سابقه زایمان، دیلاتاسیون سرویکس 6 سانتی متر، جایگاه سر جنین 1-، در بیمارستان سطح سه مجهز به بخش LDR بستری و به منظور تسکین درد، آنالژزی اپیدورال (با دوز کم) دریافت نموده است. با توجه به توضیحات ارائه شده، کدام یک از گزینه¬های مراقبتی را در بخش لیبر برای ایشان توصیه و ارائه گردد؟"
+                        }
+                        6 -> {
+                            "مادری 38 ساله با سابقه سه بار زایمان طبیعی، شروع خود بخود انقباضات رحمی و عدم دریافت اکسی توسین طی لیبر، نوزاد خود را طی زایمان طبیعی کم عارضه و با شروع خود بخودی تنفس و وزن 2400 گرم بدنیا آورد. با توجه به توضیحات ارائه شده، کدام یک از گزینه¬های مراقبتی را در بخش لیبر برای ایشان توصیه و ارائه گردد؟"
+                        }
+                        7 -> {
+                            "مادری 32 ساله، پریمی¬پار، بدنبال زایمان طبیعی کم عارضه و با اپی¬زیاتومی درجه دو، به بخش پس از زایمان انتقال یافته است. کدام یک از گزینه¬های مراقبتی را برای ایشان توصیه و ارائه می نمائید؟"
+                        }
+                        else -> ""
+                    }, modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.h6,
+                    color = Color.White
                 )
 
 
@@ -181,17 +265,19 @@ fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) 
                 Spacer(modifier = Modifier.height(5.dp))
 
 
-                Text(
-                    text = questionData.data.question.questionText,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(3.dp),
-                    style = MaterialTheme.typography.h6,
-                    textAlign = TextAlign.End,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
+                if (quizData != null) {
+                    Text(
+                        text = quizData.question.questionText,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(3.dp),
+                        style = MaterialTheme.typography.h6,
+                        textAlign = TextAlign.End,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
 
-                )
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -200,7 +286,7 @@ fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) 
                 Spacer(modifier = Modifier.height(12.dp))
 
 
-                questionData.data.answers.forEachIndexed { index, answer ->
+                quizData?.answers?.forEachIndexed { index, answer ->
 
                     Row(
                         modifier = Modifier
@@ -209,16 +295,18 @@ fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) 
                             .height(55.dp)
                             .background(color = Purplemedium, shape = RoundedCornerShape(10.dp))
                             /*.border(
-                                width = 2.dp, brush = Brush.linearGradient(
-                                    colors = listOf(
-                                        OilDark, Oilmedium
-                                    )
-                                ), shape = RoundedCornerShape(15.dp)
-                            )*/
+                                                        width = 2.dp, brush = Brush.linearGradient(
+                                                            colors = listOf(
+                                                                OilDark, Oilmedium
+                                                            )
+                                                        ), shape = RoundedCornerShape(15.dp)
+                                                    )*/
                             .clip(RoundedCornerShape(50.dp))
                             .padding(8.dp)
                             .clickable {
                                 answerIndex = index
+
+                                answerState = answer.isCorrect
                             },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -228,6 +316,8 @@ fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) 
                             selected = answerIndex == index,
                             onClick = {
                                 answerIndex = index
+
+                                answerState = answer.isCorrect
 
                             })
 
@@ -254,6 +344,23 @@ fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) 
 
                             questionNumber += 1
 
+                            if (lastQuestion == true) {
+
+                                navHostController.navigate(DestinationRoute.FinishScreen.route) {
+                                    popUpTo(DestinationRoute.QuestionsScreen.route) {
+                                        inclusive = true
+                                    }
+                                }
+                            }
+
+                            questionId?.let {
+                                quizViewModel.updateQuestionState(
+                                    true,
+                                    answerState,
+                                    it
+                                )
+                            }
+
                             Log.d("checkNum", checkNum.toString())
                         } else {
                             Toast
@@ -276,7 +383,13 @@ fun QuestionScreen(quizData: QuizState.DataState, quizViewModel: QuizViewModel) 
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    Text(text = "بعدی")
+                    Text(
+                        text = if (lastQuestion == false) {
+                            "بعدی"
+                        } else {
+                            "پایان"
+                        }
+                    )
 
                     Spacer(modifier = Modifier.width(3.dp))
 

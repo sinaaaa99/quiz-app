@@ -13,6 +13,8 @@ data class Questions(
     var id: Int,
     var questionText: String,
     var questionType: Int,
-    @ColumnInfo(defaultValue = "false")
-    var answerState: Boolean
+    var answerState: Boolean,
+    var isLast:Boolean,
+    var isAnswered: Boolean,
+    var answerText:String
 )

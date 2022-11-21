@@ -7,5 +7,5 @@ import com.example.mamaquizapp.repository.QuizRepository
 class QuizViewModelFactory(private val repository: QuizRepository) :
     ViewModelProvider.NewInstanceFactory() {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T = QuizViewModel(repository) as T
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = QuizViewModelnew(repository) as T
 }

@@ -37,7 +37,7 @@ fun MainScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DeepBlue)
+            .background(darkcolor)
             .padding(2.dp)
     ) {
 
@@ -64,7 +64,7 @@ fun MainScreen() {
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
-                        .background(DeepBlue)
+                        .background(darkcolor)
                         .padding(7.dp)
                 ) {
 

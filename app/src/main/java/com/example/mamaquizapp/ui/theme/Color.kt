@@ -54,3 +54,6 @@ val Blue3 = Color(0xFF011640)
 
 val green2 = Color(0xFF9DD4BF)
 val green3 = Color(0xFF7862A3)
+val darkcolor = Color(0xFF212940)
+val darkred = Color(0xFF8C0335)
+val khaky = Color(0xFFA8AEBF)

@@ -27,4 +27,7 @@ interface QuizDao {
 
     @Query("select * from questions")
     fun getAllQuestionsAndAllAnswers(): LiveData<List<QuestionAndAllAnswers>>
+
+    @Query("update questions set isAnswered = :isAnswerd , answerState=:answerStatee where question_id=:id")
+    suspend fun updateQuestionState(isAnswerd: Boolean, answerStatee: Boolean, id: Int)
 }
