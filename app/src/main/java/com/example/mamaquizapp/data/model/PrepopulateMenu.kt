@@ -3,9 +3,9 @@ package com.example.mamaquizapp.data.model
 import com.example.mamaquizapp.R
 import com.example.mamaquizapp.ui.theme.*
 
-object prepopeolateMenu {
+object PrepopulateMenu {
 
-    val listofmenu = menuList()
+    val listOfMenu = menuList()
 
 
     private fun menuList(): List<MenusClass> {

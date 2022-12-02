@@ -1,12 +1,15 @@
 package com.example.mamaquizapp.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.*
 import com.example.mamaquizapp.data.model.QuestionAndAllAnswers
 import com.example.mamaquizapp.repository.QuizRepository
+import com.example.mamaquizapp.repository.SharedPreferenceRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class QuizViewModelnew(private val repository: QuizRepository) : ViewModel() {
+class QuizViewModelnew(private val repository: QuizRepository, application: Application) :
+    AndroidViewModel(application) {
 
     private val allQuizAndAnswers = repository.getQuestionAndAllAnswers()
 
@@ -19,7 +22,11 @@ class QuizViewModelnew(private val repository: QuizRepository) : ViewModel() {
 
     private var score: Int = 0
 
-    val isFinished = MutableLiveData(false)
+    private val shredPref = SharedPreferenceRepository(application)
+
+//    private val dataStoreRepository = DataStoreRepository(application)
+
+//    val isFinished = MutableLiveData(false)
 
 //    fun getCurrentQuiz(): LiveData<QuestionAndAllAnswers> = _questionAndAnswers
 
@@ -69,6 +76,11 @@ class QuizViewModelnew(private val repository: QuizRepository) : ViewModel() {
 
     }
 
+    fun ignoreAnsweredQuiz() {
+        currentQuestionNum.postValue(currentQuestionNum.value?.inc())
+
+    }
+
     fun determineCurrentQuestion(category: Int) {
 
         when (category) {
@@ -94,6 +106,36 @@ class QuizViewModelnew(private val repository: QuizRepository) : ViewModel() {
         }
     }
 
+    //change navigate for scenarios
+    fun isFinished1() = shredPref.isFinished1()
+    val readData1 = shredPref.readData1
+
+    fun isFinished2() = shredPref.isFinished2()
+    val readData2 = shredPref.readData2
+
+    fun isFinished3() = shredPref.isFinished3()
+    val readData3 = shredPref.readData3
+
+    fun isFinished4() = shredPref.isFinished4()
+    val readData4 = shredPref.readData4
+
+    fun isFinished5() = shredPref.isFinished5()
+    val readData5 = shredPref.readData5
+
+    fun isFinished6() = shredPref.isFinished6()
+    val readData6 = shredPref.readData6
+
+    fun isFinished7() = shredPref.isFinished7()
+    val readData7 = shredPref.readData7
+
+    /*fun isFinishedQuiz() = viewModelScope.launch(Dispatchers.IO) {
+
+        dataStoreRepository.saveData()
+
+    }
+
+    val readFinishState = dataStoreRepository.readFromDataStore.asLiveData()
+*/
 
     init {
 

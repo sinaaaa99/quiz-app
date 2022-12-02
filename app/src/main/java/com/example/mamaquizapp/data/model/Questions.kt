@@ -16,5 +16,6 @@ data class Questions(
     var answerState: Boolean,
     var isLast:Boolean,
     var isAnswered: Boolean,
-    var answerText:String
+    var answerText:String,
+    var questionNum:Int
 )

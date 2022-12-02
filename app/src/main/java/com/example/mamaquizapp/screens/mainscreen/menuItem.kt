@@ -25,7 +25,7 @@ import com.example.mamaquizapp.ui.theme.Blue
 import com.example.mamaquizapp.utility.standardQuadFromTO
 
 @Composable
-fun menuItem(
+fun MenuItem(
     menuItem: MenusClass,
     startClickListener: () -> Unit
 ) {
@@ -101,8 +101,8 @@ fun menuItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopEnd),
-                textAlign = TextAlign.End,
-                style = MaterialTheme.typography.h6,
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.h1,
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             )
@@ -112,6 +112,7 @@ fun menuItem(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
+                style = MaterialTheme.typography.h1,
                 modifier = Modifier
                     .clickable {
 

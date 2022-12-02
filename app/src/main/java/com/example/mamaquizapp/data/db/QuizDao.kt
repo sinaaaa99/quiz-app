@@ -13,11 +13,11 @@ import com.example.mamaquizapp.data.model.Questions
 interface QuizDao {
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertQuestion(question: Questions)
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAnswers(answer: Answers)
 
 

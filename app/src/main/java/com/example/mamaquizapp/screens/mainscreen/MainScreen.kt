@@ -23,15 +23,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.mamaquizapp.QuizActivity
-import com.example.mamaquizapp.data.model.prepopeolateMenu
+import com.example.mamaquizapp.data.model.PrepopulateMenu
 import com.example.mamaquizapp.ui.theme.*
 
 @Preview(showBackground = true)
 @Composable
 fun MainScreen() {
 
-    val listOfMenu = prepopeolateMenu.listofmenu
+    val listOfMenu = PrepopulateMenu.listOfMenu
     val context = LocalContext.current
 
     Column(
@@ -78,17 +79,18 @@ fun MainScreen() {
 
                 Column {
                     Text(
-                        text = "پاسخنامه آزمون ها",
-                        style = MaterialTheme.typography.h5,
-                        textAlign = TextAlign.End,
+                        text = "نکات آموزشی",
+                        style = MaterialTheme.typography.h1,
+                        textAlign = TextAlign.Start,
                         color = Color.White,
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(1.dp))
                     Text(
-                        text = "فقط آزمون های انجام شده قابل مشاهده است",
-                        style = MaterialTheme.typography.caption,
-                        textAlign = TextAlign.End,
+                        text = "پیشنهادات گایدلاین سازمان بهداشت جهانی",
+                        style = MaterialTheme.typography.body1,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Start,
                         color = Color.White,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -107,8 +109,9 @@ fun MainScreen() {
                 .fillMaxWidth()
                 .padding(end = 7.5.dp, bottom = 7.5.dp),
             color = Color.White,
-            style = MaterialTheme.typography.h4,
-            textAlign = TextAlign.End
+            style = MaterialTheme.typography.h1,
+            fontSize = 22.sp,
+            textAlign = TextAlign.Start
         )
 
 
@@ -116,7 +119,7 @@ fun MainScreen() {
 
             itemsIndexed(listOfMenu) { index, menuItem ->
 
-                menuItem(menuItem) {
+                MenuItem(menuItem) {
 
                     val questionType = index + 1
 
