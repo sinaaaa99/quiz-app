@@ -216,9 +216,9 @@ fun QuestionScreen(quizViewModel: QuizViewModelnew, navHostController: NavHostCo
 
         AnimatedVisibility(
             visible = cardVisibility,
-            enter = fadeIn(animationSpec = tween(2000)) + expandVertically(
+            enter = fadeIn(animationSpec = tween(1500)) + expandVertically(
 
-                animationSpec = tween(2500, easing = EaseInBounce)
+                animationSpec = tween(2000, easing = EaseInBounce)
             )
         ) {
 

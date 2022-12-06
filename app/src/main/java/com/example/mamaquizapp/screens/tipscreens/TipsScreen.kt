@@ -1,4 +1,4 @@
-package com.example.mamaquizapp.screens.suggestion
+package com.example.mamaquizapp.screens.tipscreens
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -17,30 +17,27 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.mamaquizapp.screens.quizscreen.DrawLineDash
 import com.example.mamaquizapp.ui.theme.*
+import com.example.mamaquizapp.viewmodel.TipsViewModel
 import kotlinx.coroutines.launch
 
-@ExperimentalAnimationApi
-@Preview
+
 @Composable
-fun SuggestionScreen() {
+fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewModel) {
 
     var enabled by remember {
         mutableStateOf(false)
@@ -74,6 +71,9 @@ fun SuggestionScreen() {
         visibleState.value = true
 
     }
+
+    val tipsData = tipsViewModel.determineTips(1)
+
 
 
 

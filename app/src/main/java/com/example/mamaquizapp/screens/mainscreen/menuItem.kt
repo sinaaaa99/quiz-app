@@ -1,17 +1,23 @@
 package com.example.mamaquizapp.screens.mainscreen
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -23,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.mamaquizapp.data.model.MenusClass
 import com.example.mamaquizapp.ui.theme.Blue
 import com.example.mamaquizapp.utility.standardQuadFromTO
+import kotlinx.coroutines.launch
 
 @Composable
 fun MenuItem(
@@ -114,16 +121,15 @@ fun MenuItem(
                 color = Color.White,
                 style = MaterialTheme.typography.h1,
                 modifier = Modifier
-                    .clickable {
-
-                        startClickListener()
-
-
-                    }
                     .align(Alignment.BottomEnd)
                     .clip(RoundedCornerShape(10.dp))
                     .background(Blue)
                     .padding(vertical = 10.dp, horizontal = 20.dp)
+                    .clickable {
+
+                        startClickListener()
+
+                    }
 
             )
 
