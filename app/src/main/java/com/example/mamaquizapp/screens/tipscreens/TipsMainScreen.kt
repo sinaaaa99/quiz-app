@@ -17,7 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.mamaquizapp.data.model.PrepopulateTipsMenu
+import com.example.mamaquizapp.data.model.TipsDestinationRoute
+import com.example.mamaquizapp.data.model.prepopulate.PrepopulateTipsMenu
 import com.example.mamaquizapp.ui.theme.darkcolor
 
 @Composable
@@ -60,7 +61,12 @@ fun TipsMainScreen(navHostController: NavHostController) {
 
             itemsIndexed(tipsList) { index, tipsItem ->
 
-                TipsMenuItem(tipsItem, navHostController)
+                TipsMenuItem(tipsItem) {
+
+                    val categoryTip = index + 1
+
+                    navHostController.navigate(TipsDestinationRoute.TipsScreen.passCategory(categoryTip))
+                }
 
             }
         }

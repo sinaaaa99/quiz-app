@@ -1,17 +1,22 @@
 package com.example.mamaquizapp.viewmodel
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mamaquizapp.data.model.PrepopulateTips
+import com.example.mamaquizapp.data.model.prepopulate.PrepopulateTips
+import com.example.mamaquizapp.data.model.TipsClass
 import com.example.mamaquizapp.repository.TipsRepository
 import kotlinx.coroutines.launch
 
 class TipsViewModel(private val tipRepository: TipsRepository) : ViewModel() {
 
     private val _tipsNumber = MutableLiveData(0)
-    val tipsNumber: LiveData<Int> get() = _tipsNumber
+//    val tipsNumber: LiveData<Int> get() = _tipsNumber
+
+    private val _allTipsData = tipRepository.getTips()
+
+    private val _tipsData = MediatorLiveData<TipsClass>()
 
 
     //prePopulate Tips in DataBase
@@ -19,28 +24,8 @@ class TipsViewModel(private val tipRepository: TipsRepository) : ViewModel() {
 
         viewModelScope.launch {
 
-            for (tips1 in PrepopulateTips.listOfTips1) {
-                tipRepository.insertTips1(tips1)
-            }
-
-            for (tips2 in PrepopulateTips.listOfTips2) {
-                tipRepository.insertTips2(tips2)
-            }
-
-            for (tip3 in PrepopulateTips.listOfTips3) {
-                tipRepository.insertTips3(tip3)
-            }
-
-            for (tip4 in PrepopulateTips.listOfTips4) {
-                tipRepository.insertTips4(tip4)
-            }
-
-            for (tip5 in PrepopulateTips.listOfTips5) {
-                tipRepository.insertTips5(tip5)
-            }
-
-            for (tip6 in PrepopulateTips.listOfTips6) {
-                tipRepository.insertTips6(tip6)
+            for (tipsData in PrepopulateTips.listOfTips) {
+                tipRepository.insertTips(tipsData)
             }
 
         }
@@ -48,20 +33,52 @@ class TipsViewModel(private val tipRepository: TipsRepository) : ViewModel() {
     }
 
 
-    //Read Tips
-    fun determineTips(TipNumber: Int) {
+    //Read Tip
+    private fun addTipsState() {
 
-        when (TipNumber) {
+        _tipsData.addSource(_allTipsData) { AllTips ->
 
-            1 -> tipRepository.getTips1()
-            2 -> tipRepository.getTips2()
-            3 -> tipRepository.getTips3()
-            4 -> tipRepository.getTips4()
-            5 -> tipRepository.getTips5()
-            6 -> tipRepository.getTips6()
-            else -> tipRepository.getTips1()
+            val currentTipsNum = _tipsNumber.value
+
+            if (AllTips.isNotEmpty() && currentTipsNum != null) {
+
+                _tipsData.postValue(AllTips[currentTipsNum])
+            }
+
+
         }
+
+        _tipsData.addSource(_tipsNumber) { currentNum ->
+
+            val allTips = _allTipsData.value
+
+            if (allTips != null && currentNum < allTips.size) {
+
+                _tipsData.postValue(allTips[currentNum])
+            }
+
+
+        }
+
     }
+
+    fun determineCurrentTips(category: Int) {
+
+        when (category) {
+
+            1 -> _tipsNumber.postValue(0)
+            2 -> _tipsNumber.postValue(4)
+            3 -> _tipsNumber.postValue(32)
+            4 -> _tipsNumber.postValue(39)
+            5 -> _tipsNumber.postValue(45)
+            6 -> _tipsNumber.postValue(50)
+
+            else -> _tipsNumber.postValue(0)
+        }
+
+
+    }
+
 
     fun increaseTipsNumber() {
 
@@ -72,5 +89,7 @@ class TipsViewModel(private val tipRepository: TipsRepository) : ViewModel() {
     init {
 
         prepopulateTips()
+
+        addTipsState()
     }
 }

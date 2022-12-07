@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewModel) {
+fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewModel,CategoryTip:Int) {
 
     var enabled by remember {
         mutableStateOf(false)
@@ -72,7 +72,7 @@ fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewMode
 
     }
 
-    val tipsData = tipsViewModel.determineTips(1)
+
 
 
 

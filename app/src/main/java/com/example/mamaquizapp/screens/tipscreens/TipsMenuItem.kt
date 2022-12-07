@@ -21,16 +21,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.mamaquizapp.data.model.TipsClass
+import com.example.mamaquizapp.data.model.TipsMenuClass
 import com.example.mamaquizapp.ui.theme.*
 import com.example.mamaquizapp.R
 import com.example.mamaquizapp.data.model.TipsDestinationRoute
 
 @Composable
 fun TipsMenuItem(
-    tipsItem: TipsClass = TipsClass(
-        "مراقبت در طول لیبر و زایمان", tipLight1, R.drawable.tip_one
-    ), navHostController: NavHostController
+    tipsItem: TipsMenuClass,
+    onClickListener: () -> Unit
 ) {
 
 
@@ -40,13 +39,7 @@ fun TipsMenuItem(
             .height(130.dp)
             .clickable {
 
-                navHostController.navigate(TipsDestinationRoute.TipsScreen.Route) {
-
-                    popUpTo(TipsDestinationRoute.MainTipsScreen.Route) {
-
-                        inclusive = true
-                    }
-                }
+                onClickListener()
 
             }
             .padding(7.5.dp),

@@ -8,12 +8,7 @@ import com.example.mamaquizapp.data.model.*
     entities = [
         (Questions::class),
         (Answers::class),
-        (Tips1::class),
-        (Tips2::class),
-        (Tips3::class),
-        (Tips4::class),
-        (Tips5::class),
-        (Tips6::class)
+        (TipsClass::class)
     ],
     version = 1
 )

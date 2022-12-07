@@ -1,4 +1,7 @@
-package com.example.mamaquizapp.data.model
+package com.example.mamaquizapp.data.model.prepopulate
+
+import com.example.mamaquizapp.data.model.Answers
+import com.example.mamaquizapp.data.model.Questions
 
 object PrepopulateDatabase {
 

@@ -2,7 +2,7 @@ package com.example.mamaquizapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mamaquizapp.data.model.PrepopulateDatabase
+import com.example.mamaquizapp.data.model.prepopulate.PrepopulateDatabase
 import com.example.mamaquizapp.repository.QuizRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -4,14 +4,17 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "Tips1")
-class Tips1(
+class TipsClass(
     @PrimaryKey(autoGenerate = true)
     var id: Int,
+    var category: Int,
     var type: String,
     var title: String,
     var subTitle: String,
-    var answer: String
+    var answer: String,
+    var isLast: Boolean
 )
+/*
 
 @Entity(tableName = "Tips2")
 class Tips2(
@@ -61,4 +64,4 @@ class Tips6(
     var title: String,
     var subTitle: String,
     var answer: String
-)
+)*/
