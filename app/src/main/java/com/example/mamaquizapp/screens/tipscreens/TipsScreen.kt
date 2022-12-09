@@ -1,5 +1,7 @@
 package com.example.mamaquizapp.screens.tipscreens
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
@@ -18,11 +20,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,15 +38,26 @@ import androidx.navigation.NavHostController
 import com.example.mamaquizapp.screens.quizscreen.DrawLineDash
 import com.example.mamaquizapp.ui.theme.*
 import com.example.mamaquizapp.viewmodel.TipsViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewModel,CategoryTip:Int) {
+fun TipsScreen(
+    navHostController: NavHostController,
+    tipsViewModel: TipsViewModel,
+    CategoryTip: Int
+) {
 
-    var enabled by remember {
-        mutableStateOf(false)
+
+    val tipsData = tipsViewModel.tipsData.observeAsState().value
+
+    val tipsCategory by remember(tipsData) {
+
+        mutableStateOf(CategoryTip)
     }
+//    Log.d("tipsNumber1", tipsCategory.toString())
+
 
     val interactionSource = MutableInteractionSource()
 
@@ -51,12 +67,17 @@ fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewMode
         Animatable(1f)
     }
 
-    var answerVisibility by remember {
+    var answerVisibility by remember(tipsData) {
+        mutableStateOf(false)
+    }
+
+    var nextState by remember {
+
         mutableStateOf(false)
     }
 
     val animateRotate by animateFloatAsState(
-        targetValue = if (answerVisibility) 360f else 0f,
+        targetValue = if (nextState) 360f else 0f,
         animationSpec = tween(2500)
     )
 
@@ -65,17 +86,36 @@ fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewMode
         mutableStateOf(false)
     }
 
+    val isLastTip by remember(tipsData) {
+        mutableStateOf(tipsData?.isLast)
+    }
+
+    Log.d("isLastTip", isLastTip.toString())
+
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) {
 //        delay(10)
 
         visibleState.value = true
 
+        tipsViewModel.determineCurrentTips(tipsCategory)
+
     }
 
+    LaunchedEffect(nextState) {
+
+        delay(2500)
+        nextState = false
+    }
+
+    /*LaunchedEffect(isLastTip) {
+        navHostController.popBackStack()
+
+    }*/
 
 
-
-
+    Log.d("nextState", nextState.toString())
 
 
 
@@ -85,7 +125,7 @@ fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewMode
             .background(color = darkcolor),
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
             modifier = Modifier
@@ -96,18 +136,27 @@ fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewMode
 
             Spacer(modifier = Modifier.width(4.dp))
 
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "", tint = Color.White)
-
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "مراقبت در طول لیبر و زایمان",
-                style = TextStyle(
-                    fontFamily = vazir,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 18.sp,
-                    textDirection = TextDirection.Rtl, textAlign = TextAlign.Center,
-                ), fontWeight = FontWeight.Bold, color = Color.White
+            Icon(
+                modifier = Modifier.clickable {
+                    navHostController.popBackStack()
+                },
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "",
+                tint = Color.White
             )
+
+            if (tipsData != null) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = tipsData.type,
+                    style = TextStyle(
+                        fontFamily = vazir,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 18.sp,
+                        textDirection = TextDirection.Rtl, textAlign = TextAlign.Center,
+                    ), fontWeight = FontWeight.Bold, color = Color.White
+                )
+            }
 
         }
 
@@ -121,6 +170,7 @@ fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewMode
             Card(
                 modifier = Modifier
                     .padding(18.dp)
+                    .rotate(animateRotate)
                     .clickable {
                         answerVisibility = true
                     }, elevation = 20.dp
@@ -138,29 +188,24 @@ fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewMode
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Text(
-                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
-                        text = "مراقبت مادری احترام آمیز",
-                        style = TextStyle(
-                            fontFamily = vazir,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 18.sp,
-                            textDirection = TextDirection.Rtl, textAlign = TextAlign.Center,
-                        ), fontWeight = FontWeight.Bold
-                    )
+                    if (tipsData != null) {
+                        Text(
+                            modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
+                            text = tipsData.title,
+                            style = MaterialTheme.typography.h1, fontWeight = FontWeight.Bold
+                        )
+                    }
 
                     DrawLineDash()
 
-                    Text(
-                        modifier = Modifier.padding(top = 4.dp),
-                        text = "حقوق زنان باردار و مادران توسط تیم مراقبت مورد توجه قرار گیرد. مراقبتی که کرامت، حریم خصوصی و محرمانه بودن تمامی زنان را حفظ نموده، مراقبت عاری از آسیب و بدرفتاری را تضمین و امکان انتخاب آگاهانه، پشتیبانی مداوم و مراقبت توام با توجه، همدلی و درک در طول لیبر و زایمان را فراهم کند.",
-                        style = TextStyle(
-                            fontFamily = vazir,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 16.sp,
-                            textDirection = TextDirection.Rtl
-                        ), textAlign = TextAlign.Right
-                    )
+                    if (tipsData != null) {
+                        Text(
+                            modifier = Modifier.padding(top = 4.dp),
+                            text = tipsData.subTitle,
+                            style = MaterialTheme.typography.body1,
+                            textAlign = TextAlign.Right
+                        )
+                    }
 
 
                     AnimatedVisibility(
@@ -186,15 +231,13 @@ fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewMode
                                 tint = Greenmedium
                             )
 
-                            Text(
-                                text = "توصیه شده",
-                                style = TextStyle(
-                                    fontFamily = vazir,
-                                    fontWeight = FontWeight.Normal,
-                                    fontSize = 16.sp,
-                                    textDirection = TextDirection.Rtl
-                                ), textAlign = TextAlign.Center
-                            )
+                            if (tipsData != null) {
+                                Text(
+                                    text = tipsData.answer,
+                                    style = MaterialTheme.typography.h1,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     }
 
@@ -228,6 +271,28 @@ fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewMode
                                     tween(100)
                                 )
                             }
+
+                            if (answerVisibility) {
+
+                                tipsViewModel.increaseTipsNumber()
+
+                                nextState = true
+
+                                if (isLastTip == true) {
+
+                                    navHostController.popBackStack()
+                                }
+
+                            } else {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "لطفا ابتدا کارت را لمس کنید",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            }
+
                         }
                         .border(
                             border = BorderStroke(
@@ -241,7 +306,7 @@ fun TipsScreen(navHostController: NavHostController, tipsViewModel: TipsViewMode
                 ) {
                     Text(
                         style = MaterialTheme.typography.body1,
-                        text = "بعدی",
+                        text = if (isLastTip == false) "بعدی" else "پایان",
                         color = Color.White
                     )
 

@@ -37,9 +37,9 @@ fun TipsNavigation(navHostController: NavHostController, tipsViewModel: TipsView
 
 //            Log.d("Argumentss", it.arguments?.getInt(CategoryTipType).toString())
 
-            val categoryTip=it.arguments?.getInt(CategoryTipType)
+            val categoryTip = it.arguments?.getInt(CategoryTipType) ?: 1
 
-            TipsScreen(navHostController, tipsViewModel,categoryTip)
+            TipsScreen(navHostController, tipsViewModel, categoryTip)
         }
 
     }

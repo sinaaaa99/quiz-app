@@ -1,5 +1,7 @@
 package com.example.mamaquizapp.viewmodel
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,6 +19,7 @@ class TipsViewModel(private val tipRepository: TipsRepository) : ViewModel() {
     private val _allTipsData = tipRepository.getTips()
 
     private val _tipsData = MediatorLiveData<TipsClass>()
+    val tipsData: LiveData<TipsClass> get() = _tipsData
 
 
     //prePopulate Tips in DataBase
@@ -83,6 +86,7 @@ class TipsViewModel(private val tipRepository: TipsRepository) : ViewModel() {
     fun increaseTipsNumber() {
 
         _tipsNumber.postValue(_tipsNumber.value?.inc())
+        Log.d("tipsNumber", _tipsNumber.value.toString())
     }
 
 
